@@ -2,19 +2,42 @@ package auctionsniper;
 
 public class ApplicationRunner {
 
-    public void startBiddingIn(FaceAuctionServer auction) {
-        // TODO Auto-generated method stub
-        
+    public static final String SNIPER_ID = "sniper";
+    public static final String SNIPER_PASSWORD = "sniper";
+    private AuctionSniperDriver driver;
+
+    // 本に記載されていない定数
+    private static final String XMPP_HOST_NAME = "";
+    private static final String STATUS_JOINING = "参加中";
+    private static final String STATUS_LOST = "落札失敗";
+
+    public void startBiddingIn(final FaceAuctionServer auction) {
+        final Thread thread = new Thread("Test Application") {
+            @Override
+            public void run() {
+                try {
+                    Main.main(XMPP_HOST_NAME, SNIPER_ID, SNIPER_PASSWORD,
+                            auction.getItemId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        thread.setDaemon(true);
+        thread.start();
+        driver = new AuctionSniperDriver(1000);
+        driver.showsSniperStatus(STATUS_JOINING);
     }
 
     public void showsSniperHasLostAuction() {
-        // TODO Auto-generated method stub
-        
+        driver.showsSniperStatus(STATUS_LOST);
     }
 
     public void stop() {
-        // TODO Auto-generated method stub
-        
+        if (driver != null) {
+            driver.dispose();
+        }
     }
 
 }
