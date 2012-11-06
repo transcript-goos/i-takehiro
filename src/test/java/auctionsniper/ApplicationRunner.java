@@ -7,8 +7,8 @@ public class ApplicationRunner {
     private AuctionSniperDriver driver;
 
     // 本に記載されていない定数
-    private static final String XMPP_HOST_NAME = "";
-    private static final String STATUS_JOINING = "参加中";
+    private static final String XMPP_HOST_NAME = "localhost";
+    public static final String STATUS_JOINING = "Joining";
     private static final String STATUS_LOST = "落札失敗";
 
     public void startBiddingIn(final FaceAuctionServer auction) {
