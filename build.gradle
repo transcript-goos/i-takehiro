@@ -20,6 +20,8 @@ repositories {
 
 dependencies {
     compile 'org.igniterealtime.smack:smack:3.2.1'
+    testRuntime 'com.googlecode.windowlicker:windowlicker-swing:r268'
+    testRuntime 'com.googlecode.windowlicker:windowlicker-core:r268'
 
     testCompile 'junit:junit-dep:4.10'
     testCompile 'org.hamcrest:hamcrest-core:1.3'
