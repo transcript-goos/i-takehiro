@@ -4,7 +4,7 @@ import javax.swing.SwingUtilities;
 
 public class Main {
 
-    public static final String MAIN_WINDOW_NAME = null;
+    public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
 
     private MainWindow ui;
 
