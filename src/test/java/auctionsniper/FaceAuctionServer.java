@@ -1,11 +1,18 @@
 package auctionsniper;
 
-import java.text.Format;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManagerListener;
+import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.packet.Message;
 
 public class FaceAuctionServer {
 
@@ -17,6 +24,7 @@ public class FaceAuctionServer {
     private final String itemId;
     private final XMPPConnection connection;
     private Chat currentChat;
+    private SingleMessageListener messageListener = new SingleMessageListener();
 
     public FaceAuctionServer(final String itemId) {
         this.itemId = itemId;
@@ -29,10 +37,12 @@ public class FaceAuctionServer {
                 AUCTION_PASSWORD, AUCTION_RESOURCE);
         this.connection.getChatManager().addChatListener(
                 new ChatManagerListener() {
+
                     @Override
                     public void chatCreated(final Chat chat,
                             final boolean createdLocally) {
                         FaceAuctionServer.this.currentChat = chat;
+                        chat.addMessageListener(messageListener);
                     }
                 });
     }
@@ -41,19 +51,30 @@ public class FaceAuctionServer {
         return this.itemId;
     }
 
-    public void hasReceivedJoinRequestFromSniper() {
-        // TODO Auto-generated method stub
-
+    public void hasReceivedJoinRequestFromSniper() throws InterruptedException {
+        this.messageListener.receivesAMessage();
     }
 
-    public void announceClosed() {
-        // TODO Auto-generated method stub
-
+    public void announceClosed() throws XMPPException {
+        this.currentChat.sendMessage(new Message());
     }
 
     public void stop() {
-        // TODO Auto-generated method stub
-
+        this.connection.disconnect();
     }
 
+    public class SingleMessageListener implements MessageListener {
+        private final ArrayBlockingQueue<Message> messages = new ArrayBlockingQueue<Message>(
+                1);
+
+        @Override
+        public void processMessage(final Chat chat, final Message message) {
+            this.messages.add(message);
+        }
+
+        public void receivesAMessage() throws InterruptedException {
+            assertThat("Message", this.messages.poll(5, TimeUnit.SECONDS),
+                    is(notNullValue()));
+        }
+    }
 }
