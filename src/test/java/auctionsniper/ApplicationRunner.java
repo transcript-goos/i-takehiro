@@ -9,7 +9,7 @@ public class ApplicationRunner {
     // 本に記載されていない定数
     private static final String XMPP_HOST_NAME = "localhost";
     public static final String STATUS_JOINING = "Joining";
-    private static final String STATUS_LOST = "落札失敗";
+    private static final String STATUS_LOST = "Lost";
 
     public void startBiddingIn(final FaceAuctionServer auction) {
         final Thread thread = new Thread("Test Application") {
