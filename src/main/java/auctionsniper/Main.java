@@ -29,7 +29,7 @@ public class Main {
 
     public static void main(final String... args) throws Exception {
         final Main main = new Main();
-        final XMPPConnection connection = connectTo(args[ARG_HOSTNAME],
+        final XMPPConnection connection = connection(args[ARG_HOSTNAME],
                 args[ARG_USERNAME], args[ARG_PASSWORD]);
         final Chat chat = connection.getChatManager().createChat(
                 auctionId(args[ARG_ITEM_ID], connection),
@@ -54,7 +54,7 @@ public class Main {
         });
     }
 
-    private static XMPPConnection connectTo(final String hostname,
+    private static XMPPConnection connection(final String hostname,
             final String username, final String password) throws XMPPException {
         final XMPPConnection connection = new XMPPConnection(hostname);
         connection.connect();
